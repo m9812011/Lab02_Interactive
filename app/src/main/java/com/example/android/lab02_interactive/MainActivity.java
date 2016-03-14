@@ -2,11 +2,14 @@ package com.example.android.lab02_interactive;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -14,10 +17,10 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView quautityTextView;
     private TextView priceTextView;
-    private int number = 0;
-    private int price = 5;
+    private Button orderButton;
+    private int mNumber = 0;
+    private int mPrice = 10;
     private Spinner spinner;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,17 +29,18 @@ public class MainActivity extends AppCompatActivity {
 
         findViews();
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                                                R.array.fruit,
-                                                android.R.layout.simple_spinner_item);
+                R.array.fruit,
+                android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(listener);
     }
 
-    public void submitOrder(View view){
+    public void submit(View view){
         switch (view.getId()){
             case R.id.order:
-                display(Integer.parseInt(quautityTextView.getText().toString()));
+                buttonSwitch(view);
+                display();
                 break;
             case  R.id.cancel:
                 cancel();
@@ -45,23 +49,26 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     public void countCale(View view){
         switch (view.getId()){
             case R.id.add:
-                number++;
+                    ++mNumber;
                 break;
             case R.id.remove:
-                number--;
+                if(mNumber > 0) {
+                    --mNumber;
+                }
                 break;
         }
-        quautityTextView.setText(String.valueOf(number));
-    }
+        buttonSwitch(view);
+        display();
 
+    }
 
     private void findViews(){
         quautityTextView = (TextView)findViewById(R.id.quantity_text_view);
         priceTextView = (TextView)findViewById(R.id.price_text_view);
+        orderButton = (Button)findViewById(R.id.order);
         spinner = (Spinner)findViewById(R.id.spinner);
     }
 
@@ -69,12 +76,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             if(position == 0){
-                price = 10;
+                mPrice = 10;
             }else if (position == 1){
-                price = 20;
+                mPrice = 20;
             }else {
-                price = 30;
+                mPrice = 30;
             }
+            display();
         }
 
         @Override
@@ -83,15 +91,38 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void display(int number) {
-        int total = price * number;
-        String myString = NumberFormat.getCurrencyInstance(Locale.TAIWAN).format(total);
-        priceTextView.setText(myString);
+    private void display() {
+        int total = mPrice * mNumber;
+        String mPriceFormat = NumberFormat.getCurrencyInstance(Locale.TAIWAN).format(total);
+        StringBuilder mPriceMessage =  new StringBuilder();
+        mPriceMessage.append(mPriceFormat).append(mNumber == 0 ? "\nFree" : "\nThank you");
+        quautityTextView.setText(String.valueOf(mNumber));
+        priceTextView.setText(mPriceMessage);
+
+
     }
 
-    private void cancel(){
-        String myString = "NT$0.00";
-        quautityTextView.setText(String.valueOf(0));
-        priceTextView.setText(myString);
+    private void cancel() {
+        mNumber = 0;
+        quautityTextView.setText(String.valueOf(mNumber));
+        priceTextView.setText("NT$0.00\nFree");
+    }
+
+    //控制orderButton避免連續點擊產生多餘的String
+    private void buttonSwitch(View view){
+        switch (view.getId()){
+            case R.id.add:
+            case R.id.remove:
+                //orderButton.setVisibility(View.VISIBLE);
+                orderButton.setEnabled(true);
+                Log.i("MainActivity","啟動 Order Button");
+                break;
+            case R.id.order:
+                //orderButton.setVisibility(View.INVISIBLE);
+                orderButton.setEnabled(false);
+                Log.i("MainActivity","關閉 Order Button");
+                break;
+
+        }
     }
 }
