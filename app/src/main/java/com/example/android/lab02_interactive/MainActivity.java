@@ -10,9 +10,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.text.NumberFormat;
-import java.util.Locale;
-
 public class MainActivity extends AppCompatActivity {
 
     private TextView quautityTextView;
@@ -20,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     private Button orderButton;
     private int mNumber = 0;
     private int mPrice = 10;
+    private final String mNT$= "NT$";
+    private StringBuilder mTotalPriceMessage = new StringBuilder(mNT$);//"NT$0"也可以(動態)
     private Spinner spinner;
 
     @Override
@@ -93,11 +92,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void display() {
         int total = mPrice * mNumber;
-        String mPriceFormat = NumberFormat.getCurrencyInstance(Locale.TAIWAN).format(total);
-        StringBuilder mPriceMessage =  new StringBuilder();
-        mPriceMessage.append(mPriceFormat).append(mNumber == 0 ? "\nFree" : "\nThank you");
+//        String mPriceFormat = NumberFormat.getCurrencyInstance(Locale.TAIWAN).format(total);
+//        StringBuilder mPriceMessage =  new StringBuilder();
+//        mPriceMessage.append(mPriceFormat).append(mNumber == 0 ? "\nFree" : "\nThank you");
+
+        /***/
+        int startIndex = mNT$.length();//計算要從第幾個開始刪除(包含)
+        int endIndex = mTotalPriceMessage.length();//計算要刪除到哪一個字(不包含)
+        mTotalPriceMessage.delete(startIndex,endIndex).append(total).append(mNumber == 0 ? "\nFree" : "\nThank you");
+
         quautityTextView.setText(String.valueOf(mNumber));
-        priceTextView.setText(mPriceMessage);
+        priceTextView.setText(mTotalPriceMessage);
 
 
     }
