@@ -5,9 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private int mPrice = 10;
     private final String mNT$= "NT$";
     private StringBuilder mTotalPriceMessage = new StringBuilder(mNT$);//"NT$0"也可以(動態)
-    private Spinner spinner;
+//    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +25,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         findViews();
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.fruit,
-                android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(listener);
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+//                R.array.fruit,
+//                android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinner.setAdapter(adapter);
+//        spinner.setOnItemSelectedListener(listener);
     }
 
     public void submit(View view){
@@ -68,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         quautityTextView = (TextView)findViewById(R.id.quantity_text_view);
         priceTextView = (TextView)findViewById(R.id.price_text_view);
         orderButton = (Button)findViewById(R.id.order);
-        spinner = (Spinner)findViewById(R.id.spinner);
+//        spinner = (Spinner)findViewById(R.id.spinner);
     }
 
     AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
